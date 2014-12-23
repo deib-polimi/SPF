@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="main_section_titles">
+        <item>Around me</item>
+        <item>Conversations</item>
+        <item>My Profile</item>
+    </string-array>
+</resources>

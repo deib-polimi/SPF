@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="it.polimi.spf.example.nex2.QuerySettingActivity">
+
+    <item
+        android:id="@+id/query_menu_save"
+        android:title="@string/query_menu_save"
+        android:icon="@android:drawable/ic_menu_save"
+        android:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/query_menu_add"
+        android:title="@string/query_menu_add"
+        android:showAsAction="never"
+        android:icon="@android:drawable/ic_menu_add"/>
+</menu>

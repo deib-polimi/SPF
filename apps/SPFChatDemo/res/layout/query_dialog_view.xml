@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/query_type_radiogroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp" >
+
+    <RadioButton
+        android:id="@+id/query_tag_radio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/query_type_tag" />
+
+    <EditText
+        android:id="@+id/tag_input"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="30dp"
+        android:ems="10"
+        android:enabled="true"
+        android:hint="@string/tag_field_hint"
+        android:inputType="text" />
+
+    <RadioButton
+        android:id="@+id/query_prop_radio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/query_type_prop" />
+
+    <Spinner
+        android:id="@+id/prop_key_input"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:enabled="false" />
+
+    <EditText
+        android:id="@+id/prop_value_input"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="@string/prop_value_hint"
+        android:inputType="text" />
+
+</RadioGroup>

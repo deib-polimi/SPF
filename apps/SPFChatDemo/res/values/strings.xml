@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SPF Chat Demo</string>
+    <string name="action_settings">Settings</string>
+    <string name="detail_name">Name</string>
+    <string name="detail_identifier">Identifier</string>
+    <string name="detail_profilepic_description">Profile picture</string>
+    <string name="profile_show_full">Show full profile</string>
+    <string name="people_no_result">No people found</string>
+    <string name="people_search_intro">Tap refresh to start search</string>
+    <string name="people_search_performing">Searching…</string>
+    <string name="people_search_error">Error in search. Please retry</string>
+    <string name="people_connection_error">Connection error. Please restart the app.</string>
+    <string name="people_menu_refresh">Refresh</string>
+    <string name="people_menu_query">Set query</string>
+    <string name="people_action_profile">Show profile</string>
+    <string name="title_activity_user_profile">User Profile</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="people_not_available">Selected person is not in proximity</string>
+    <string name="conversation_list_empty">No conversation available</string>
+    <string name="activity_conversation">Conversation</string>
+    <string name="message_list_emptymessage">No messages in this conversation</string>
+    <string name="message_input_hint">Message</string>
+    <string name="conversation_send_message_contentdesc">Send message</string>
+    <string name="message_empty">Please insert a message</string>
+    <string name="message_person_lost">Contact is not available</string>
+    <string name="message_send_error">Could not send message</string>
+    <string name="title_activity_query_setting">Create custom query</string>
+    <string name="query_param_list_empty">No parameter set</string>
+    <string name="query_menu_save">Save query</string>
+    <string name="query_menu_add">Add parameter</string>
+    <string name="query_type_tag">Tag</string>
+    <string name="tag_field_hint">Tag to search</string>
+    <string name="query_type_prop">Property</string>
+    <string name="prop_value_hint">Property value</string>
+    <string name="error_spf_not_installed_title">SPF not installed</string>
+    <string name="error_spf_not_installed_msg">This app requires SPF to run. Please install SPF and launch this app again.</string>
+
+</resources>

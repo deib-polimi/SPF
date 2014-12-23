@@ -25,9 +25,9 @@ proguard/
 # Log Files
 *.log
 
+#MacOs
+.DS_Store
+
 #AndroidStudio 
 .idea/workspace.xml
 .idea/libraries/
-
-#MacOs
-.DS_Store

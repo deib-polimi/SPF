@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/keyValueListEntry"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/profileedit_field_identifier"
+            style="@style/keyValueListEntryKey"
+            android:layout_width="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content" />
+
+        <it.polimi.spf.app.view.CircleSelectSpinner
+            android:id="@+id/profile_field_clearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+    <View style="@style/keyValueListDivider" />
+
+    <Spinner
+        android:id="@+id/profileedit_field_multiple_value"
+        style="@style/keyValueListEntryValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text" />
+
+</LinearLayout>

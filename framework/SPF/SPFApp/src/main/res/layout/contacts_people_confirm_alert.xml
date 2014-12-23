@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_margin" >
+
+    <it.polimi.spf.app.view.PersonCard
+        android:id="@+id/contacts_people_confirm_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_margin" />
+
+    <TextView
+        style="@style/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_margin"
+        android:text="@string/contacts_people_confirm_circle" />
+
+    <it.polimi.spf.app.view.CirclePicker
+        android:id="@+id/contacts_people_confirm_circles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        style="@style/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_margin"
+        android:labelFor="@+id/contacts_people_confirm_passphrase"
+        android:text="@string/contacts_people_confirm_passphrase" />
+
+    <EditText
+        android:id="@id/contacts_people_confirm_passphrase"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:inputType="textPassword" />
+
+</LinearLayout>

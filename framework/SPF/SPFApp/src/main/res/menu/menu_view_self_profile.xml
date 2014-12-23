@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/profileview_persona_selector"
+        android:actionLayout="@layout/profileview_persona_spinner"
+        android:showAsAction="always"
+        android:title=""/>
+   
+    <item
+        android:id="@+id/profileview_edit"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:showAsAction="always"
+        android:title=""/>
+
+</menu>

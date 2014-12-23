@@ -1,8 +1,3 @@
-SPF
-===
-
-Social Proximity Framework
-
 # SPF: Social Proximity Framework #
 
 ## What is SPF ##

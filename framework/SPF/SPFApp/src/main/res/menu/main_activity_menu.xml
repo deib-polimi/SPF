@@ -1,0 +1,10 @@
+
+    <menu xmlns:android="http://schemas.android.com/apk/res/android">
+      <item
+        android:id="@+id/connect_switch_menu_item"
+        android:title=""
+        android:showAsAction="always"
+        android:actionLayout="@layout/connect_switch_layout"
+    />           
+        
+    </menu>

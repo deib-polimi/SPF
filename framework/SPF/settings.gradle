@@ -1,0 +1,6 @@
+include ':SPFShared'
+include ':SPFFramework'
+include ':SPFAlljoynMid'
+include ':SPFWFDMid'
+include ':SPFApp'
+include ':SPFLib'

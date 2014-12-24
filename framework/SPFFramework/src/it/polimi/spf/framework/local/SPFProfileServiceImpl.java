@@ -37,7 +37,7 @@ import it.polimi.spf.shared.model.SPFError;
  * @author aliprax
  * 
  */
-public class SPFProfileServiceImpl extends LocalProfileService.Stub {
+/* package */class SPFProfileServiceImpl extends LocalProfileService.Stub {
 	private static final String TAG = "LocalProfileService";
 	private final SPFSecurityMonitor mSecurityMonitor;
 	private final SPFProfileManager mProfile;

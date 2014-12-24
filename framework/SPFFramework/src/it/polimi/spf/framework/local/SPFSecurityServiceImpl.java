@@ -40,7 +40,7 @@ import it.polimi.spf.shared.model.AppDescriptor;
  * @author darioarchetti
  * 
  */
-public class SPFSecurityServiceImpl extends SPFSecurityService.Stub {
+/* package */class SPFSecurityServiceImpl extends SPFSecurityService.Stub {
 
 	private static final String TAG = "SPFSecurityServiceImpl";
 	private Context mContext;

@@ -45,7 +45,7 @@ import it.polimi.spf.shared.model.SPFSearchDescriptor;
  * @author darioarchetti
  * 
  */
-public class SPFProximityServiceImpl extends SPFProximityService.Stub {
+/* package */class SPFProximityServiceImpl extends SPFProximityService.Stub {
 	private final static String TAG = "SPFProximityService";
 	private final SPFSecurityMonitor mSecurityMonitor = SPF.get().getSecurityMonitor();
 

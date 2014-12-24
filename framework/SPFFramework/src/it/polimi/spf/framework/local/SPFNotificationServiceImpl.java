@@ -43,7 +43,7 @@ import it.polimi.spf.shared.model.SPFTrigger;
  *         it.polimi.spf.framework.local.SPFNotificationService.aidl
  * 
  */
-public class SPFNotificationServiceImpl extends SPFNotificationService.Stub {
+/* package */class SPFNotificationServiceImpl extends SPFNotificationService.Stub {
 
 	private static final String TAG = "SPFNotificationService";
 	private SPFNotificationManager mNotificationManager;

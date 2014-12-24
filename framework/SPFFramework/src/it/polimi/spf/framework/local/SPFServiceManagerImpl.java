@@ -43,7 +43,7 @@ import it.polimi.spf.shared.model.SPFServiceDescriptor;
  * @author darioarchetti
  * 
  */
-public class SPFServiceManagerImpl extends LocalServiceManager.Stub {
+/* package */class SPFServiceManagerImpl extends LocalServiceManager.Stub {
 	private static final String TAG = "LocalServiceManager";
 	private SPFSecurityMonitor mSecurityMonitor = SPF.get().getSecurityMonitor();
 

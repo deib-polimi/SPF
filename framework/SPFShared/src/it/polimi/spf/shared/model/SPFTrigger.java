@@ -25,9 +25,10 @@ import android.os.Parcelable;
 /**
  * TODO #Documentation
  * 
- * @author Jacopo Aliprandi
  */
 public class SPFTrigger implements Parcelable {
+
+	private static final long MIN_SLEEP_PERIOD = 30/*seconds*/*1000/*millis*/;
 
 	/*
 	 * the identifier generated in SPF database
@@ -90,12 +91,53 @@ public class SPFTrigger implements Parcelable {
 	 * @throws IllegalTriggerException
 	 *             - if the trigger is not valid
 	 */
+	@Deprecated
 	public SPFTrigger(String name, SPFQuery query, SPFAction action, boolean oneShot, long sleepPeriod) throws IllegalTriggerException {
 		this(-1, name, query, action, oneShot, sleepPeriod);
 	}
-
+	
 	/**
-	 * Creates a new trigger
+	 * Creates a new trigger with a specified sleep period.
+	 * 
+	 * @param name
+	 *            - the name of the trigger
+	 * @param query
+	 *            - the query of the trigger
+	 * @param action
+	 *            - the action to be executed
+	 * @param oneShot
+	 *            - if the trigger is oneShot
+	 * @param sleepPeriod
+	 *            - the sleep period of <code>this</code> trigger
+	 * 
+	 * @throws IllegalTriggerException
+	 *             - if the trigger is not valid
+	 */
+	public SPFTrigger(String name, SPFQuery query, SPFAction action, long sleepPeriod) throws IllegalTriggerException {
+		this(-1, name, query, action, false, sleepPeriod);
+	}
+	
+	/**
+	 * Creates a new one-shot trigger. 
+	 * 
+	 * @param name
+	 *            - the name of the trigger
+	 * @param query
+	 *            - the query of the trigger
+	 * @param action
+	 *            - the action to be executed
+	 * 
+	 * @throws IllegalTriggerException
+	 *             - if the trigger is not valid
+	 */
+	public SPFTrigger(String name, SPFQuery query, SPFAction action) throws IllegalTriggerException {
+		this(-1, name, query, action, true, 0);
+	}
+
+	//TODO hide internal constructor
+	/**
+	 * INTERNAL USE
+	 * Creates a new trigger. 
 	 * 
 	 * @param id
 	 *            - the id of the trigger
@@ -118,15 +160,15 @@ public class SPFTrigger implements Parcelable {
 		this.name = name;
 		this.query = query;
 		this.action = action;
-		if (oneShot) {
-			this.isOneShot = oneShot;
+		this.isOneShot = oneShot;
+		if (this.isOneShot) {
 			sleepPeriod = Long.MAX_VALUE;
 		} else {
-			this.isOneShot = false;
+			sleepPeriod = sleepPeriod>=MIN_SLEEP_PERIOD? sleepPeriod:MIN_SLEEP_PERIOD;
 			this.sleepPeriod = activePeriod;
 		}
 	}
-
+	
 	/**
 	 * The identifier of this trigger, it is set to -1 if it is volatile (not
 	 * saved).
@@ -268,7 +310,6 @@ public class SPFTrigger implements Parcelable {
 	/**
 	 * Exception thrown when the trigger state is inconsistent.
 	 * 
-	 * @author Jacopo Aliprandi
 	 */
 	public class IllegalTriggerException extends Exception {
 
@@ -280,7 +321,6 @@ public class SPFTrigger implements Parcelable {
 	 * Exception thrown when there is an attempt to modify the trigger while it
 	 * is not in the editable state.
 	 * 
-	 * @author Jacopo Aliprandi
 	 */
 	public class TriggerNotEditableException extends RuntimeException {
 
@@ -303,7 +343,6 @@ public class SPFTrigger implements Parcelable {
 	 */
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -314,7 +353,6 @@ public class SPFTrigger implements Parcelable {
 	 */
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
 		dest.writeParcelable(query, flags);
 		dest.writeParcelable(action, flags);
 		dest.writeLong(id);

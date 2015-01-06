@@ -152,7 +152,12 @@ public class SPFServiceRegistry {
 		}
 	}
 
-	public Collection<VerbSupport> getVerbSupportList() {
+	@Deprecated
+	public Collection<ActivityVerb> getVerbSupportList() {
+		return mActivityTable.getVerbSupport();
+	}
+	
+	public Collection<ActivityVerb> getSupportedVerbs() {
 		return mActivityTable.getVerbSupport();
 	}
 

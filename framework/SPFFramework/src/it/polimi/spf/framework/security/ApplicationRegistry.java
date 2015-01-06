@@ -130,6 +130,17 @@ public class ApplicationRegistry {
 	}
 
 	/**
+	 * Removes the authorization for a given application
+	 * 
+	 * @param application
+	 *            - the authorized application to remove
+	 * @return - true if the app has been correctly removed
+	 */
+	public boolean unregisterApplication(AppAuth application) {
+		return unregisterApplication(application.getAppIdentifier());
+	}
+
+	/**
 	 * To be called from application uninstall monitor
 	 * 
 	 * @param appIdentifier

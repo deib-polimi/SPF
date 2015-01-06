@@ -30,13 +30,13 @@ import java.util.Set;
  * @author darioarchetti
  * 
  */
-public class VerbSupport {
+public class ActivityVerb {
 
 	private final String mVerb;
 	private Set<ServiceIdentifier> mSupportingServices;
 	private ServiceIdentifier mDefaultService;
 
-	public VerbSupport(String verb) {
+	public ActivityVerb(String verb) {
 		mSupportingServices = new HashSet<ServiceIdentifier>();
 		mVerb = verb;
 	}

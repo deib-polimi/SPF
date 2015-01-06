@@ -221,12 +221,12 @@ import android.util.Log;
 
 	/**
 	 * Returns a list containing the default service for each verb, as an
-	 * instance of {@link VerbSupport}
+	 * instance of {@link ActivityVerb}
 	 * 
-	 * @return - the list of {@link VerbSupport}
+	 * @return - the list of {@link ActivityVerb}
 	 */
-	public Collection<VerbSupport> getVerbSupport() {
-		Map<String, VerbSupport> entries = new HashMap<String, VerbSupport>();
+	public Collection<ActivityVerb> getVerbSupport() {
+		Map<String, ActivityVerb> entries = new HashMap<String, ActivityVerb>();
 
 		String[] columns = { Contract.APP_ID, Contract.SERVICE_NAME, Contract.VERB };
 		Cursor c = getReadableDatabase().query(true, Contract.TABLE_SERVICES, columns, null, null, null, null, null, null);
@@ -240,9 +240,9 @@ import android.util.Log;
 			String appId = c.getString(appIndex);
 			String svcName = c.getString(svcIndex);
 
-			VerbSupport d = entries.get(verb);
+			ActivityVerb d = entries.get(verb);
 			if (d == null) {
-				d = new VerbSupport(verb);
+				d = new ActivityVerb(verb);
 				entries.put(verb, d);
 			}
 
@@ -251,7 +251,7 @@ import android.util.Log;
 
 		c.close();
 
-		for (VerbSupport d : entries.values()) {
+		for (ActivityVerb d : entries.values()) {
 			d.setDefaultApp(getServiceForInternal(d.getVerb()));
 		}
 

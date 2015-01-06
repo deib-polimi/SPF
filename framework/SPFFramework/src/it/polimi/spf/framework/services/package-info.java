@@ -9,7 +9,7 @@
  * <ul>
  * <li>{@link it.polimi.spf.framework.services.SPFServiceRegistry}: Allows the registration of services and the dispatching of activities and invocation requests</li>
  * <li>{@link it.polimi.spf.framework.services.ActivityInjector }: Utility class to automatically inject information into activities</li>
- * <li>{@link it.polimi.spf.framework.services.VerbSupport }: Lists the available services for a given verb, together with the default one</li>
+ * <li>{@link it.polimi.spf.framework.services.ActivityVerb }: Lists the available services for a given verb, together with the default one</li>
  * </ul>
  * 
  * TODO:

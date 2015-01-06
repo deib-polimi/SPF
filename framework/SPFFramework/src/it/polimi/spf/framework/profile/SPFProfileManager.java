@@ -84,18 +84,6 @@ public class SPFProfileManager {
 	}
 
 	/**
-	 * Saves the profile field container in the default persona.
-	 * 
-	 * @param container
-	 *            - the {@link ProfileFieldContainer} to save
-	 */
-	public void setProfileFieldBulk(ProfileFieldContainer container) {
-		SPFPersona persona = new SPFPersona();
-		// FIXME persona
-		mProfileTable.setProfileFieldBulk(persona, container);
-	}
-
-	/**
 	 * Returns a {@link ProfileFieldContainer} filled with the values specified
 	 * in the request.
 	 * 
@@ -171,6 +159,18 @@ public class SPFProfileManager {
 	 * @param persona
 	 * @return a {@link Bundle}
 	 */
+	public Bundle getGroupsOf(SPFPersona persona) {
+		return mProfileTable.getCirclesOf(persona);
+	}
+	
+	/**
+	 * Returns a {@link Bundle} with profile fields identifiers as keys, and
+	 * {@link ArrayList<String>} as circles.
+	 * 
+	 * @param persona
+	 * @return a {@link Bundle}
+	 */
+	@Deprecated
 	public Bundle getCirclesOf(SPFPersona persona) {
 		return mProfileTable.getCirclesOf(persona);
 	}
@@ -186,6 +186,37 @@ public class SPFProfileManager {
 	 *            - the {@link SPFPersona} to modify
 	 * @return true if the operation was successful
 	 */
+	public boolean addGroupToField(ProfileField<?> field, String group, SPFPersona persona) {
+		return mProfileTable.addCircleToFields(group, field, persona);
+	}
+
+	/**
+	 * Remove a circle from a specified profile field.
+	 * 
+	 * @param field
+	 *            the {@link ProfileField} to modify
+	 * @param circle
+	 *            - the circle to add
+	 * @param persona
+	 *            - the {@link SPFPersona} to modify
+	 * @return true if the operation was successful
+	 */
+	public boolean removeGroupFromField(ProfileField<?> field, String group, SPFPersona persona) {
+		return mProfileTable.removeCircleFromField(group, field, persona);
+	}
+
+	/**
+	 * Adds a circle to a specified {@link ProfileField}.
+	 * 
+	 * @param field
+	 *            - the {@link ProfileField} to modify
+	 * @param circle
+	 *            - the circle to add
+	 * @param persona
+	 *            - the {@link SPFPersona} to modify
+	 * @return true if the operation was successful
+	 */
+	@Deprecated
 	public boolean addCircleToField(ProfileField<?> field, String circle, SPFPersona persona) {
 		return mProfileTable.addCircleToFields(circle, field, persona);
 	}
@@ -201,6 +232,7 @@ public class SPFProfileManager {
 	 *            - the {@link SPFPersona} to modify
 	 * @return true if the operation was successful
 	 */
+	@Deprecated
 	public boolean removeCircleFromField(ProfileField<?> field, String circle, SPFPersona persona) {
 		return mProfileTable.removeCircleFromField(circle, field, persona);
 	}

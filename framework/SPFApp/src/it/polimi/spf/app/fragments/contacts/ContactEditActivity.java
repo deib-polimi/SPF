@@ -71,7 +71,7 @@ public class ContactEditActivity extends Activity implements CirclePicker.Change
 		mCirclePicker.setOnChangeListener(this);
 
 		List<String> selectedCircles = new ArrayList<String>(mInfo.getPersonAuth().getCircles());
-		List<String> selectableCircles = new ArrayList<String>(mPersonRegistry.getCircles());
+		List<String> selectableCircles = new ArrayList<String>(mPersonRegistry.getGroups());
 		mCirclePicker.setCircles(selectedCircles, selectableCircles);
 	}
 
@@ -92,7 +92,7 @@ public class ContactEditActivity extends Activity implements CirclePicker.Change
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						SPF.get().getSecurityMonitor().getPersonRegistry().deletePerson(mInfo.getIdentifier());
+						SPF.get().getSecurityMonitor().getPersonRegistry().deletePerson(mInfo);
 						finish();
 					}
 				}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -113,11 +113,11 @@ public class ContactEditActivity extends Activity implements CirclePicker.Change
 
 	@Override
 	public void onCircleAdded(String tag) {
-		mPersonRegistry.addPersontoCircle(mPersonIdentifier, tag);
+		mPersonRegistry.addPersonToGroup(mPersonIdentifier, tag);
 	}
 
 	@Override
 	public void onCircleRemoved(String tag) {
-		mPersonRegistry.removePersonFromCircle(mPersonIdentifier, tag);
+		mPersonRegistry.removePersonFromGroup(mPersonIdentifier, tag);
 	}
 }

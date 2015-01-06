@@ -44,7 +44,7 @@ public class PersonRegistry {
 	/**
 	 * 
 	 */
-	public PersonRegistry(Context c) {
+	PersonRegistry(Context c) {
 		if (c == null) {
 			throw new NullPointerException();
 		}
@@ -202,28 +202,66 @@ public class PersonRegistry {
 		return result;
 	}
 
+	@Deprecated
 	public void deletePerson(String userUID) {
 		mTable.deleteEntryOf(userUID);
 	}
 
+	public void deletePerson(PersonInfo person) {
+		mTable.deleteEntryOf(person.getIdentifier());
+	}
 	// Circles
+	@Deprecated
 	public Collection<String> getCircles() {
 		return mTable.getCircles();
 	}
 
+	@Deprecated
 	public boolean addCircle(String circle) {
 		return mTable.addCircle(circle);
 	}
 
+	@Deprecated
 	public boolean removeCircle(String circle) {
 		return mTable.removeCircle(circle);
 	}
 
+	@Deprecated
 	public boolean addPersontoCircle(String userUID, String circle) {
 		return mTable.addPersonToCircle(userUID, circle);
 	}
 
+	@Deprecated
 	public boolean removePersonFromCircle(String userUID, String circle) {
 		return mTable.removePersonFromCircle(userUID, circle);
+	}
+	
+	//Groups
+	public Collection<String> getGroups() {
+		return mTable.getCircles();
+	}
+
+	public boolean addGroup(String group) {
+		return mTable.addCircle(group);
+	}
+
+	public boolean removeGroup(String group) {
+		return mTable.removeCircle(group);
+	}
+
+	public boolean addPersonToGroup(PersonInfo contact, String group) {
+		return mTable.addPersonToCircle(contact.getIdentifier(), group);
+	}
+
+	public boolean removePersonFromGroup(PersonInfo contact, String group) {
+		return mTable.removePersonFromCircle(contact.getIdentifier(), group);
+	}
+	
+	public boolean addPersonToGroup(String identifier, String group) {
+		return mTable.addPersonToCircle(identifier, group);
+	}
+
+	public boolean removePersonFromGroup(String identifier, String group) {
+		return mTable.removePersonFromCircle(identifier, group);
 	}
 }

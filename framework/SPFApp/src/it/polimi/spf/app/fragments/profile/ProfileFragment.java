@@ -333,13 +333,13 @@ public class ProfileFragment extends Fragment implements LoaderManager.LoaderCal
 				@Override
 				public void onCircleAdded(ProfileField<E> field, String circle) {
 					Log.d(TAG, "Circle " + circle + " added to field " + field + " of persona " + mCurrentPersona);
-					SPF.get().getProfileManager().addCircleToField(field, circle, mCurrentPersona);
+					SPF.get().getProfileManager().addGroupToField(field, circle, mCurrentPersona);
 				}
 
 				@Override
 				public void onCircleRemoved(ProfileField<E> field, String circle) {
 					Log.d(TAG, "Circle " + circle + " removed from field " + field + " of persona " + mCurrentPersona);
-					SPF.get().getProfileManager().removeCircleFromField(field, circle, mCurrentPersona);
+					SPF.get().getProfileManager().removeGroupFromField(field, circle, mCurrentPersona);
 				}
 			});
 		default:

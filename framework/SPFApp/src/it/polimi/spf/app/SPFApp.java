@@ -23,7 +23,6 @@ import it.polimi.spf.alljoyn.AlljoynProximityMiddleware;
 import it.polimi.spf.framework.ExceptionLogger;
 import it.polimi.spf.framework.R;
 import it.polimi.spf.framework.SPFContext;
-import it.polimi.spf.wfdadapter.WFDMiddlewareAdapter;
 
 import android.app.Application;
 import android.app.Notification;

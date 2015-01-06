@@ -79,8 +79,8 @@ public class PersonasCirclesFragment extends Fragment {
 				false);
 		LinearLayout layout = (LinearLayout) v
 				.findViewById(R.id.personas_circle_fragment_layout);
-		Collection<String> circles = SPF.get().getSecurityMonitor().getPersonRegistry().getCircles();
-		Bundle bc = SPF.get().getProfileManager().getCirclesOf(mPersona);
+		Collection<String> circles = SPF.get().getSecurityMonitor().getPersonRegistry().getGroups();
+		Bundle bc = SPF.get().getProfileManager().getGroupsOf(mPersona);
 		for (ProfileField<?> f : mProfileFieldsToShow) {
 			ProfileFieldCirclePickerItem item = new ProfileFieldCirclePickerItem(
 					getActivity());
@@ -111,12 +111,12 @@ public class PersonasCirclesFragment extends Fragment {
 		@Override
 		public void onRemove(ProfileField<?> f, String circle) {
 			SPF.get().getProfileManager()
-					.removeCircleFromField(f, circle, mPersona);
+					.removeGroupFromField(f, circle, mPersona);
 		}
 
 		@Override
 		public void onAdd(ProfileField<?> f, String circle) {
-			SPF.get().getProfileManager().addCircleToField(f, circle, mPersona);
+			SPF.get().getProfileManager().addGroupToField(f, circle, mPersona);
 		}
 	};
 

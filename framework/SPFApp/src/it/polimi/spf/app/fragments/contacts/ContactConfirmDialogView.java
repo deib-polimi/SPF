@@ -63,7 +63,7 @@ public class ContactConfirmDialogView extends LinearLayout {
 		mPersonCard = (PersonCard) findViewById(R.id.contacts_people_confirm_card);
 
 		mCirclePicker = (CirclePicker) findViewById(R.id.contacts_people_confirm_circles);
-		Collection<String> availableCircles = SPF.get().getSecurityMonitor().getPersonRegistry().getCircles();
+		Collection<String> availableCircles = SPF.get().getSecurityMonitor().getPersonRegistry().getGroups();
 		mCirclePicker.setCircles(null, new ArrayList<String>(availableCircles));
 		
 		mPassphrase = (EditText) findViewById(R.id.contacts_people_confirm_passphrase);

@@ -54,7 +54,7 @@ public class ApplicationRegistry {
 	private final IdentifierGenerator mTokenGenerator;
 	private final Context mContext;
 
-	public ApplicationRegistry(Context context) {
+	ApplicationRegistry(Context context) {
 		if (context == null) {
 			throw new NullPointerException();
 		}
@@ -91,7 +91,7 @@ public class ApplicationRegistry {
 	 * @return the appAuth of the application, or null if the app is not
 	 *         installed
 	 */
-	public AppAuth getAppAuthorizationByAppId(String appId) {
+	AppAuth getAppAuthorizationByAppId(String appId) {
 		String where = Contract.COLUMN_APP_IDENTIFIER + " = ?";
 		String args[] = { appId };
 		Cursor c = mRegistryTable.getReadableDatabase().query(Contract.TABLE_NAME, null, where, args, null, null, null);

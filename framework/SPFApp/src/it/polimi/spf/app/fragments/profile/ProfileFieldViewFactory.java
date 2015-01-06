@@ -274,7 +274,7 @@ public final class ProfileFieldViewFactory {
 	private <E> void setUpCircleView(View root, ProfileField<E> field, FieldValueListener<E> callback) {
 		switch (mMode) {
 		case SELF:
-			List<String> selCircles = SPF.get().getProfileManager().getCirclesOf(mPersona).getStringArrayList(field.getIdentifier());
+			List<String> selCircles = SPF.get().getProfileManager().getGroupsOf(mPersona).getStringArrayList(field.getIdentifier());
 			((TextView) root.findViewById(R.id.profile_field_clearance)).setText(mHelper.sumUpCircles(selCircles));
 			break;
 
@@ -282,8 +282,8 @@ public final class ProfileFieldViewFactory {
 			root.findViewById(R.id.profile_field_clearance).setVisibility(View.GONE);
 			break;
 		case EDIT:
-			List<String> circles = new ArrayList<String>(SPF.get().getSecurityMonitor().getPersonRegistry().getCircles());
-			List<String> selectedCircles = SPF.get().getProfileManager().getCirclesOf(mPersona).getStringArrayList(field.getIdentifier());
+			List<String> circles = new ArrayList<String>(SPF.get().getSecurityMonitor().getPersonRegistry().getGroups());
+			List<String> selectedCircles = SPF.get().getProfileManager().getGroupsOf(mPersona).getStringArrayList(field.getIdentifier());
 			CircleSelectSpinner spinner = (CircleSelectSpinner) root.findViewById(R.id.profile_field_clearance);
 			spinner.setItems(circles);
 			if (selectedCircles != null) {

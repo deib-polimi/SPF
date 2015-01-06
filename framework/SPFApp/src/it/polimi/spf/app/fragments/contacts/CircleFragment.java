@@ -172,7 +172,7 @@ public class CircleFragment extends Fragment implements OnClickListener, LoaderM
 
 				@Override
 				public Collection<String> loadInBackground() {
-					return registry.getCircles();
+					return registry.getGroups();
 				}
 			};
 		case ADD_CIRCLE_LOADER:
@@ -180,9 +180,9 @@ public class CircleFragment extends Fragment implements OnClickListener, LoaderM
 
 				@Override
 				public Collection<String> loadInBackground() {
-					String circle = args.getString(EXTRA_CIRCLE);
-					registry.addCircle(circle);
-					return registry.getCircles();
+					String group = args.getString(EXTRA_CIRCLE);
+					registry.addGroup(group);
+					return registry.getGroups();
 				}
 			};
 		case DELETE_CIRCLE_LOADER:
@@ -190,9 +190,9 @@ public class CircleFragment extends Fragment implements OnClickListener, LoaderM
 
 				@Override
 				public Collection<String> loadInBackground() {
-					String circle = args.getString(EXTRA_CIRCLE);
-					registry.removeCircle(circle);
-					return registry.getCircles();
+					String group = args.getString(EXTRA_CIRCLE);
+					registry.removeGroup(group);
+					return registry.getGroups();
 				}
 			};
 

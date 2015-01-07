@@ -26,8 +26,8 @@ import java.util.Set;
 
 import it.polimi.spf.app.R;
 import it.polimi.spf.framework.SPF;
+import it.polimi.spf.framework.services.ActivityVerb;
 import it.polimi.spf.framework.services.ServiceIdentifier;
-import it.polimi.spf.framework.services.VerbSupport;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
@@ -46,11 +46,11 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class ActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Collection<VerbSupport>> {
+public class ActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Collection<ActivityVerb>> {
 
 	private static final int LOAD_LIST_LOADER_ID = 0;
 
-	private VerbSupportAdapter mAdapter;
+	private ActivityVerbAdapter mAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class ActivityFragment extends Fragment implements LoaderManager.LoaderCa
 
 		ListView activities = findView(R.id.activities_list);
 		activities.setEmptyView(findView(R.id.activities_list_emptyview));
-		mAdapter = new VerbSupportAdapter(getActivity());
+		mAdapter = new ActivityVerbAdapter(getActivity());
 		activities.setAdapter(mAdapter);
 
 		getLoaderManager().initLoader(LOAD_LIST_LOADER_ID, null, this).forceLoad();
@@ -76,14 +76,14 @@ public class ActivityFragment extends Fragment implements LoaderManager.LoaderCa
 	}
 
 	@Override
-	public Loader<Collection<VerbSupport>> onCreateLoader(int id, Bundle args) {
+	public Loader<Collection<ActivityVerb>> onCreateLoader(int id, Bundle args) {
 		switch (id) {
 		case LOAD_LIST_LOADER_ID:
-			return new AsyncTaskLoader<Collection<VerbSupport>>(getActivity()) {
+			return new AsyncTaskLoader<Collection<ActivityVerb>>(getActivity()) {
 
 				@Override
-				public Collection<VerbSupport> loadInBackground() {
-					return SPF.get().getServiceRegistry().getVerbSupportList();
+				public Collection<ActivityVerb> loadInBackground() {
+					return SPF.get().getServiceRegistry().getSupportedVerbs();
 				}
 
 			};
@@ -94,7 +94,7 @@ public class ActivityFragment extends Fragment implements LoaderManager.LoaderCa
 	}
 
 	@Override
-	public void onLoadFinished(Loader<Collection<VerbSupport>> loader, Collection<VerbSupport> data) {
+	public void onLoadFinished(Loader<Collection<ActivityVerb>> loader, Collection<ActivityVerb> data) {
 		switch (loader.getId()) {
 		case LOAD_LIST_LOADER_ID:
 			mAdapter.clear();
@@ -107,13 +107,13 @@ public class ActivityFragment extends Fragment implements LoaderManager.LoaderCa
 	}
 
 	@Override
-	public void onLoaderReset(Loader<Collection<VerbSupport>> loader) {
+	public void onLoaderReset(Loader<Collection<ActivityVerb>> loader) {
 		// Do nothing
 	}
 
-	private static class VerbSupportAdapter extends ArrayAdapter<VerbSupport> implements OnItemSelectedListener {
+	private static class ActivityVerbAdapter extends ArrayAdapter<ActivityVerb> implements OnItemSelectedListener {
 
-		public VerbSupportAdapter(Context c) {
+		public ActivityVerbAdapter(Context c) {
 			super(c, android.R.layout.simple_list_item_1);
 		}
 
@@ -121,7 +121,7 @@ public class ActivityFragment extends Fragment implements LoaderManager.LoaderCa
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = convertView != null ? convertView : LayoutInflater.from(getContext()).inflate(R.layout.activities_listelement, parent, false);
 			ViewHolder holder = ViewHolder.from(view);
-			VerbSupport item = getItem(position);
+			ActivityVerb item = getItem(position);
 			ServiceIdentifierAdapter adapter = new ServiceIdentifierAdapter(getContext(), item.getSupportingServices());
 
 			holder.verb.setText(item.getVerb());

@@ -26,7 +26,8 @@
     <string name="message_empty">Please insert a message</string>
     <string name="message_person_lost">Contact is not available</string>
     <string name="message_send_error">Could not send message</string>
-    <string name="title_activity_query_setting">Create custom query</string>
+    <string name="title_activity_query_setting">Customize query</string>
+    <string name="query_popup_title">Add parameter to query</string>
     <string name="query_param_list_empty">No parameter set</string>
     <string name="query_menu_save">Save query</string>
     <string name="query_menu_add">Add parameter</string>

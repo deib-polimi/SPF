@@ -6,11 +6,11 @@
         android:id="@+id/people_menu_refresh"
         android:title="@string/people_menu_refresh"
         android:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_rotate"/>
+        android:icon="@drawable/ic_action_refresh"/>
 
     <item android:id="@+id/people_menu_query"
           android:title="@string/people_menu_query"
           android:showAsAction="ifRoom"
-          android:icon="@android:drawable/ic_menu_search"/>
+          android:icon="@drawable/ic_action_search"/>
 
 </menu>

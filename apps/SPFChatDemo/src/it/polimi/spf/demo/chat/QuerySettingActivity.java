@@ -76,10 +76,10 @@ public class QuerySettingActivity extends Activity {
             case android.R.id.home:
                 finish(false);
                 return true;
-            case R.id.query_menu_add:
+            case R.id.query_action_add_parameter:
                 mDialog.show(getFragmentManager(), "QueryDialog");
                 return true;
-            case R.id.query_menu_save:
+            case R.id.query_action_save:
                 finish(true);
                 return true;
             default:
@@ -160,6 +160,7 @@ public class QuerySettingActivity extends Activity {
             }
 
             return builder.setView(view)
+            		.setTitle(R.string.query_popup_title)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
                         @Override

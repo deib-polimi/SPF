@@ -236,7 +236,7 @@ public abstract class Component<C extends Component<C, I>, I extends IInterface>
 	 *            - the type of the {@link Component} implementation that this
 	 *            class will be listen for availability.
 	 */
-	public interface ConnectionCallback<C extends Component<C, ?>> {
+	protected interface ConnectionCallback<C extends Component<C, ?>> {
 
 		/**
 		 * Called when the binding to the service has been completed and thus
@@ -279,7 +279,7 @@ public abstract class Component<C extends Component<C, I>, I extends IInterface>
 	 *            the type of the AIDL interface that is wrapped by the
 	 *            component
 	 */
-	public interface Descriptor<C extends Component<C, I>, I extends IInterface> {
+	protected interface Descriptor<C extends Component<C, I>, I extends IInterface> {
 
 		/**
 		 * @return the action to be included in the intent when binding to

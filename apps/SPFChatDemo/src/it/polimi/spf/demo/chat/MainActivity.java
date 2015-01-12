@@ -71,7 +71,7 @@ public class MainActivity extends Activity {
 		SPFServiceRegistry.load(this, new SPFServiceRegistry.Callback() {
 			@Override
 			public void onServiceReady(SPFServiceRegistry localServiceRegistry) {
-				localServiceRegistry.registerService(ProximityService.class);
+				localServiceRegistry.registerService(ProximityService.class, ProximityServiceImpl.class);
 				localServiceRegistry.disconnect();
 			}
 

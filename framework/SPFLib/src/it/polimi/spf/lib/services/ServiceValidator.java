@@ -24,9 +24,10 @@ import it.polimi.spf.shared.model.SPFActivity;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 /**
  * Static class to validate service interfaces.
@@ -48,10 +49,6 @@ class ServiceValidator {
 		public final static String MISSING_ANNOTATION = "Service is missing required annotation @Service";
 		public static final String MISSING_SERVICE_NAME = "Service name is empty.";
 		public static final String MISSING_APP_NAME = "App name is required for this service.";
-		public static final String MISSING_INTENT = "Intent name is empty";
-		public final static String SUPPORTED_TYPES = "Only primitive types are supported.";
-		public final static String RET_TYPE_INVALID = "Invalid return type %s (Method %s.%s)." + SUPPORTED_TYPES;
-		public final static String PARAM_TYPE_INVALID = "Invalid parameter #%s type %s (Method %s.%s)." + SUPPORTED_TYPES;
 		public static final String INVALID_EXCEPTIONS = "Service methods must declare an InvocationException, and nothing else.";
 		public static final String CONSUMER_RET_TYPE = "Consumer method %s must return void";
 		public static final String CONSUMER_PARAM = "Consumer method %s should have only one parameter of type SPFActivity";
@@ -60,10 +57,9 @@ class ServiceValidator {
 		public static final String INVALID_IMPLEMENTATION = "Service implementation %s does not implement service %s";
 		public static final String WRONG_SUPERCLASS = "Service implementation %s is not a sublcass of " + SPFServiceEndpoint.class.getSimpleName();
 		public static final String ABSTRACT_IMPLEMENTATION = "Service implementation %s must not be abstract";
+		public static final String SERVICE_NOT_REGISTERED = "Service %s is not registered";
 	}
-
-	private static Class<?>[] validTypes = new Class<?>[] { String.class, Long.class, Integer.class, Float.class, Double.class };
-
+	
 	/**
 	 * Validates the interface of a service. In case of failed validation, an
 	 * unchecked {@link IllegalServiceException} is thrown.
@@ -85,7 +81,7 @@ class ServiceValidator {
 	 *            - the validation to be performed, either
 	 *            <code>TYPE_PUBLISHED</code> or <code>TYPE_REMOTE</code>
 	 */
-	static void validate(Class<?> serviceInterface, int validationType) {
+	static void validateInterface(Class<?> serviceInterface, int validationType) {
 		// Verify serviceInterface is an interface.
 		assertThat(serviceInterface.isInterface(), ErrorMsg.INTERFACE_REQUIRED);
 
@@ -99,13 +95,6 @@ class ServiceValidator {
 		// Verify service app name is not empty for remote services
 		assertThat(!(validationType == TYPE_REMOTE && isStringEmpty(service.app())), ErrorMsg.MISSING_APP_NAME);
 
-		// Verify intent
-		assertThat(!(validationType == TYPE_PUBLISHED && isStringEmpty(service.componentName())), ErrorMsg.MISSING_INTENT);
-
-		if (validationType == TYPE_PUBLISHED) {
-			//validateServiceImplementation(serviceInterface, service.componentName());
-		}
-
 		// Analyze methods
 		for (Method m : serviceInterface.getMethods()) {
 			if (m.isAnnotationPresent(ActivityConsumer.class)) {
@@ -116,18 +105,24 @@ class ServiceValidator {
 		}
 	}
 
-	static void validateServiceImplementation(Class<?> serviceClass, String implName) throws IllegalServiceException {
+	static void validateServiceImplementation(Context context, ComponentName componentName, Class<?> serviceClass) throws IllegalServiceException {
 		// Verify component name describes a class that can be loaded by
 		// classloader
 		// TODO Dario change after refactor of registration
-		ComponentName componentName = ComponentName.unflattenFromString(implName);
 		Class<?> implClass;
+		String implName = componentName.getClassName();
 		try {
-			implClass = Class.forName(componentName.getClassName());
+			implClass = Class.forName(implName);
 		} catch (ClassNotFoundException e) {
 			throw new IllegalServiceException(String.format(ErrorMsg.MISSING_IMPLEMENTATION, implName));
 		}
 
+		try{
+			context.getPackageManager().getServiceInfo(componentName, 0);
+		} catch(NameNotFoundException e){
+			throw new IllegalServiceException(String.format(ErrorMsg.SERVICE_NOT_REGISTERED, implName));
+		}
+		
 		// Verify that the implementation actually implements the service
 		// interface
 		assertThat(serviceClass.isAssignableFrom(implClass), e(ErrorMsg.INVALID_IMPLEMENTATION, implName, serviceClass.getCanonicalName()));
@@ -149,19 +144,6 @@ class ServiceValidator {
 	}
 
 	private static void validateStandardMethod(String serviceName, Method m) {
-		String methodName = m.getName();
-
-		// Verify return type is valid.
-		Class<?> retType = m.getReturnType();
-		//assertThat(isTypeValid(retType), e(ErrorMsg.RET_TYPE_INVALID, retType, serviceName, methodName));
-
-		// Verify parameter types are valid.
-		Class<?>[] params = m.getParameterTypes();
-		for (int i = 0; i < params.length; i++) {
-			Class<?> paramType = params[i];
-			//assertThat(paramType.equals(SPFActivity.class) || isTypeValid(params[i]), e(ErrorMsg.PARAM_TYPE_INVALID, i, params[i], serviceName, methodName));
-		}
-
 		// Verify exception type is valid.
 		Type[] exceptions = m.getGenericExceptionTypes();
 		assertThat(exceptions.length == 1 && ServiceInvocationException.class.equals(exceptions[0]), ErrorMsg.INVALID_EXCEPTIONS);
@@ -175,10 +157,6 @@ class ServiceValidator {
 
 	private static String e(String errorMsg, Object... args) {
 		return String.format(errorMsg, args);
-	}
-
-	private static boolean isTypeValid(Class<?> type) {
-		return type.isPrimitive() || Arrays.asList(validTypes).contains(type);
 	}
 
 	private static boolean isStringEmpty(String s) {

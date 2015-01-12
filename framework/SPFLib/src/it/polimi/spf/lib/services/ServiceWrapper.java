@@ -63,7 +63,7 @@ public class ServiceWrapper {
 	 *            - the service implementation
 	 */
 	public ServiceWrapper(Class<?> serviceInterface, Object implementation) {
-		ServiceValidator.validate(serviceInterface, ServiceValidator.TYPE_PUBLISHED);
+		ServiceValidator.validateInterface(serviceInterface, ServiceValidator.TYPE_PUBLISHED);
 		ServiceInterface service = serviceInterface.getAnnotation(ServiceInterface.class);
 
 		this.mServiceDescriptor = ServiceInterface.Convert.toServiceDescriptor(service);

@@ -28,6 +28,7 @@ import it.polimi.spf.shared.aidl.LocalServiceManager;
 import it.polimi.spf.shared.model.SPFError;
 import it.polimi.spf.shared.model.SPFServiceDescriptor;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.ServiceConnection;
 import android.os.IBinder;
@@ -86,12 +87,45 @@ public final class SPFServiceRegistry extends Component<SPFServiceRegistry, Loca
 	 * @param serviceInterface
 	 * @param implementation
 	 */
+	@Deprecated
 	public <T> void registerService(Class<? super T> serviceInterface) {
 		Utils.notNull(serviceInterface, "serviceInterface must not be null");
 
-		ServiceValidator.validate(serviceInterface, ServiceValidator.TYPE_PUBLISHED);
 		ServiceInterface annotation = serviceInterface.getAnnotation(ServiceInterface.class);
-		SPFServiceDescriptor descriptor = ServiceInterface.Convert.toServiceDescriptor(annotation);
+		if (annotation == null) {
+			throw new IllegalServiceException("Missing annotation");
+		}
+
+		String flattenComponentName = annotation.componentName();
+		if (flattenComponentName == null) {
+			throw new IllegalStateException("Missing componentName");
+		}
+
+		ComponentName cn = ComponentName.unflattenFromString(flattenComponentName);
+		registerService(serviceInterface, cn);
+	}
+
+	/**
+	 * Allows to register a service in the service index. Such service is made
+	 * available to remote apps.
+	 * 
+	 * @param serviceInterface
+	 * @param implementation
+	 */
+	public <T> void registerService(Class<? super T> serviceInterface, Class<T> implementationClass) {
+		Utils.notNull(serviceInterface, "serviceInterface must not be null");
+		Utils.notNull(implementationClass, "implementationClass must not be null");
+
+		ComponentName cn = new ComponentName(getContext(), implementationClass);
+		registerService(serviceInterface, cn);
+	}
+
+	private <T> void registerService(Class<? super T> serviceInterface, ComponentName cn) {
+		ServiceValidator.validateInterface(serviceInterface, ServiceValidator.TYPE_PUBLISHED);
+		ServiceValidator.validateServiceImplementation(getContext(), cn, serviceInterface);
+
+		ServiceInterface annotation = serviceInterface.getAnnotation(ServiceInterface.class);
+		SPFServiceDescriptor descriptor = ServiceInterface.Convert.toServiceDescriptor(annotation, cn.flattenToString());
 		String token = getAccessToken();
 
 		try {
@@ -112,7 +146,7 @@ public final class SPFServiceRegistry extends Component<SPFServiceRegistry, Loca
 	 */
 	public <T> void unregisterService(Class<? super T> serviceInterface) {
 		Utils.notNull(serviceInterface, "serviceInterface must not be null");
-		ServiceValidator.validate(serviceInterface, ServiceValidator.TYPE_PUBLISHED);
+		ServiceValidator.validateInterface(serviceInterface, ServiceValidator.TYPE_PUBLISHED);
 		ServiceInterface svcInterface = serviceInterface.getAnnotation(ServiceInterface.class);
 		SPFServiceDescriptor svcDesc = ServiceInterface.Convert.toServiceDescriptor(svcInterface);
 		String token = getAccessToken();

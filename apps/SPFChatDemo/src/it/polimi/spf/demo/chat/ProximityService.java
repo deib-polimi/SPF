@@ -31,8 +31,7 @@ import it.polimi.spf.shared.model.SPFActivity;
         name = "SPFChatDemo Proximity",
         description = "Service that allows users to communicate",
         version = "0.1",
-        consumedVerbs = {ProximityService.POKE_VERB, ProximityService.MESSAGE_VERB},
-        componentName = "it.polimi.spf.demo.chat/it.polimi.spf.demo.chat.ProximityServiceImpl"
+        consumedVerbs = {ProximityService.POKE_VERB, ProximityService.MESSAGE_VERB}
 )
 public interface ProximityService {
 

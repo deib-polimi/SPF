@@ -100,7 +100,7 @@ public class InvocationStub {
 		}
 
 		// Validate service
-		ServiceValidator.validate(serviceInterface, ServiceValidator.TYPE_REMOTE);
+		ServiceValidator.validateInterface(serviceInterface, ServiceValidator.TYPE_REMOTE);
 		ServiceInterface service = serviceInterface.getAnnotation(ServiceInterface.class);
 		SPFServiceDescriptor desc = ServiceInterface.Convert.toServiceDescriptor(service);
 

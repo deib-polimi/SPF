@@ -80,7 +80,7 @@ public abstract class SPFServiceEndpoint extends Service {
 		List<Class<?>> serviceInterfaces = new ArrayList<Class<?>>();
 		for (Class<?> iface : getClass().getInterfaces()) {
 			if (iface.isAnnotationPresent(ServiceInterface.class)) {
-				ServiceValidator.validate(iface, ServiceValidator.TYPE_PUBLISHED);
+				ServiceValidator.validateInterface(iface, ServiceValidator.TYPE_PUBLISHED);
 				serviceInterfaces.add(iface);
 			}
 		}

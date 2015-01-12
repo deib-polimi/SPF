@@ -61,19 +61,20 @@ public @interface ServiceInterface {
 	 * The description of the service
 	 */
 	public String description() default "";
-	
+
 	/**
 	 * The version of the service. It is always mandatory.
 	 */
 	public String version();
 
 	/**
-	 * The component that implements the service. It will be used by SPF to bind to the
-	 * {@link SPFServiceEndpoint} exposed by the application to
-	 * dispatch method execution requests. It is mandatory for services that are
-	 * being registered.
+	 * The component that implements the service. It will be used by SPF to bind
+	 * to the {@link SPFServiceEndpoint} exposed by the application to dispatch
+	 * method execution requests. It is mandatory for services that are being
+	 * registered.
 	 */
-	public String componentName();
+	@Deprecated
+	public String componentName() default "";
 
 	/**
 	 * The list of {@link SPFActivity} verbs supported by the service.
@@ -102,7 +103,20 @@ public @interface ServiceInterface {
 		 */
 		public final static SPFServiceDescriptor toServiceDescriptor(ServiceInterface svc) {
 			Utils.notNull(svc, "svcInterface must not be null");
-			return new SPFServiceDescriptor(svc.name(), svc.description(), svc.app(), svc.version(), svc.componentName(), svc.consumedVerbs());
+			return new SPFServiceDescriptor(svc.name(), svc.description(), svc.app(), svc.version(), null, svc.consumedVerbs());
+		}
+
+		/**
+		 * Converts an instance of {@link ServiceInterface} into one of
+		 * {@link ServiceDescriptor} containing the same interface, including
+		 * its component name
+		 * 
+		 * @param svcInterface
+		 * @return
+		 */
+		public final static SPFServiceDescriptor toServiceDescriptor(ServiceInterface svc, String flattenComponentName) {
+			Utils.notNull(svc, "svcInterface must not be null");
+			return new SPFServiceDescriptor(svc.name(), svc.description(), svc.app(), svc.version(), flattenComponentName, svc.consumedVerbs());
 		}
 	}
 }

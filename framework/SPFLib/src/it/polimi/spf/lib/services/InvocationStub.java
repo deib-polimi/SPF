@@ -22,6 +22,7 @@ package it.polimi.spf.lib.services;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
 
 import android.os.Looper;
 import android.util.Log;
@@ -159,7 +160,7 @@ public class InvocationStub {
 	 *             if an invocation is thrown during the execution of the
 	 *             service.
 	 */
-	public Object invokeMethod(String methodName, Object[] args, Class<?> retType) throws ServiceInvocationException {
+	public Object invokeMethod(String methodName, Object[] args, Type retType) throws ServiceInvocationException {
 		checkCurrentThread(methodName);
 		Utils.notNull(methodName);
 		Utils.notNull(args);
@@ -203,7 +204,7 @@ public class InvocationStub {
 
 		@Override
 		public Object invoke(Object proxy, Method method, Object[] args) throws ServiceInvocationException {
-			return mInvocationStub.invokeMethod(method.getName(), args, method.getReturnType());
+			return mInvocationStub.invokeMethod(method.getName(), args, method.getGenericReturnType());
 		}
 	}
 }

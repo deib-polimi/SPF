@@ -25,6 +25,7 @@ import it.polimi.spf.shared.model.SPFServiceDescriptor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -101,7 +102,7 @@ public class ServiceWrapper {
 		Method m = mMethodIndex.get(methodName);
 		Object[] params;
 		try {
-			params = deserializeParameters(request.getPayload(), m.getParameterTypes());
+			params = deserializeParameters(request.getPayload(), m.getGenericParameterTypes());
 		} catch (ServiceInvocationException e) {
 			return InvocationResponse.error("Error deserializing parameters:" + e.getMessage());
 		}
@@ -142,7 +143,7 @@ public class ServiceWrapper {
 		return service.name();
 	}
 
-	private Object[] deserializeParameters(String payload, Class<?>[] parameterTypes) throws ServiceInvocationException {
+	private Object[] deserializeParameters(String payload, Type[] parameterTypes) throws ServiceInvocationException {
 		JsonParser parser = new JsonParser();
 		JsonArray array = parser.parse(payload).getAsJsonArray();
 		if (array.size() != parameterTypes.length) {

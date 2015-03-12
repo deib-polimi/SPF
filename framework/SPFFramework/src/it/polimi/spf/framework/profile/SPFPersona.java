@@ -86,6 +86,10 @@ public class SPFPersona implements Parcelable {
 
 	@Override
 	public boolean equals(Object o) {
+		if(o == this){
+			return true;
+		}
+		
 		if (o instanceof SPFPersona) {
 			return ((SPFPersona) o).mDisplayName.equals(mDisplayName);
 		}

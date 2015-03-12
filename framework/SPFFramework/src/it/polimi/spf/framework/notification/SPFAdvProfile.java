@@ -19,45 +19,30 @@
  */
 package it.polimi.spf.framework.notification;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.util.Log;
+import com.google.gson.Gson;
 
 public class SPFAdvProfile {
 
-	private static final String TAG = "SPFAdvPRofile";
 	private Map<String, String> fields;
+	private List<String> applications;
 
 	public static SPFAdvProfile fromJSON(String advProfileJSON) {
-		SPFAdvProfile profile = new SPFAdvProfile();
-		try {
-			JSONObject obj = new JSONObject(advProfileJSON);
-			Iterator<String> it = obj.keys();
-
-			while (it.hasNext()) {
-				String key = it.next();
-				profile.put(key, obj.getString(key));
-			}
-
-		} catch (JSONException e) {
-			Log.e(TAG, "JSON error", e);
-		}
-
-		return profile;
+		return new Gson().fromJson(advProfileJSON, SPFAdvProfile.class);
 	}
 
 	public SPFAdvProfile() {
 		this.fields = new HashMap<String, String>();
+		this.applications = new ArrayList<String>();
 	}
 
-	public void put(String key, String value) {
+	public void putField(String key, String value) {
 		if (key == null || value == null) {
 			throw new NullPointerException();
 		}
@@ -69,31 +54,31 @@ public class SPFAdvProfile {
 		if (key == null) {
 			throw new NullPointerException();
 		}
-		
+
 		return fields.get(key);
 	}
-	
-	public Set<String> getFieldKeySet(){
+
+	public Set<String> getFieldKeySet() {
 		return fields.keySet();
 	}
 
-	public String toJSON() {
-		JSONObject o = new JSONObject();
-
-		for (String k : fields.keySet()) {
-			try {
-				o.put(k, fields.get(k));
-			} catch (JSONException e) {
-				// This should not happen as all the fields are strings
-			}
-		}
-
-		return o.toString();
-	}
-
 	public Collection<String> getFieldsValues() {
-		
 		return fields.values();
 	}
 
+	public void putApplication(String identifier) {
+		if (identifier == null) {
+			throw new NullPointerException();
+		}
+
+		applications.add(identifier);
+	}
+
+	public Collection<String> getApplications() {
+		return applications;
+	}
+
+	public String toJSON() {
+		return new Gson().toJson(this);
+	}
 }

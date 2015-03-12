@@ -24,6 +24,7 @@ import it.polimi.spf.framework.SPF;
 import it.polimi.spf.framework.profile.SPFProfileManager;
 import it.polimi.spf.framework.profile.SPFPersona;
 import it.polimi.spf.framework.proximity.ProximityMiddleware;
+import it.polimi.spf.framework.security.AppAuth;
 import it.polimi.spf.shared.model.ProfileField;
 import it.polimi.spf.shared.model.ProfileFieldContainer;
 
@@ -43,43 +44,51 @@ public class SPFAdvertisingManager {
 	private final static String PREF_ADVERTISED_FIELD_NAME = "advertisedFields";
 	private final static String PREF_ADVERTISING_ACTIVE = "advertisingActive";
 	private final static String PREF_PERSONA_TO_ADV = "personaToAdv";
+	private final static String PREF_ADVERTISE_APPLICATIONS = "advertiseApps";
 	private static final String SEPARATOR = ";";
 
 	private final Context mContext;
 	private final ProximityMiddleware mMiddleware;
+	
 	private final Set<String> mIdentifiers;
 	private SPFPersona mPersonaToAdv;
-	private boolean mAdvertisingEnabled;
+	private boolean mAdvertisingEnabled, mShouldAdvertiseApplications;
 
 	public SPFAdvertisingManager(Context context, ProximityMiddleware middleware) {
 		this.mContext = context;
 		this.mMiddleware = middleware;
+		
+		// Set up profile fields
 		this.mIdentifiers = new HashSet<String>();
-		//set up profile fields
 		SharedPreferences prefs = getSharedPreferences();
 		String pref = prefs.getString(PREF_ADVERTISED_FIELD_NAME, null);
 		if (pref == null) {
 			return;
 		}
+		
 		String[] fields = TextUtils.split(pref, SEPARATOR);
 		for (String s : fields) {
 			mIdentifiers.add(s);
 		}
-		//set up advertising status
+		
+		// Set application advertisement status
+		mShouldAdvertiseApplications = prefs.getBoolean(PREF_ADVERTISE_APPLICATIONS, false);
+		
+		// set up advertising status
 		mAdvertisingEnabled = prefs.getBoolean(PREF_ADVERTISING_ACTIVE, false);
-		//set spf persona to be advertised
+		
+		// set spf persona to be advertised
 		final String defaultPersonaName = SPFPersona.getDefault().getIdentifier();
-		final String personaToAdvName = prefs.getString(PREF_PERSONA_TO_ADV, 
-				defaultPersonaName);
+		final String personaToAdvName = prefs.getString(PREF_PERSONA_TO_ADV, defaultPersonaName);
 		mPersonaToAdv = new SPFPersona(personaToAdvName);
 	}
-	
-	public void setPersonaToAdvertise(SPFPersona persona){
+
+	public void setPersonaToAdvertise(SPFPersona persona) {
 		final List<SPFPersona> availablePersonas = SPF.get().getProfileManager().getAvailablePersonas();
-		if(persona==null||!availablePersonas.contains(persona)){
-			if(!availablePersonas.contains(mPersonaToAdv)){
+		if (persona == null || !availablePersonas.contains(persona)) {
+			if (!availablePersonas.contains(mPersonaToAdv)) {
 				persona = SPFPersona.getDefault();
-			}else{
+			} else {
 				return;
 			}
 		}
@@ -109,6 +118,15 @@ public class SPFAdvertisingManager {
 		}
 	}
 
+	public void setApplicationAdvertisingEnabled(boolean active) {
+		mShouldAdvertiseApplications = active;
+		getSharedPreferences().edit().putBoolean(PREF_ADVERTISE_APPLICATIONS, active).apply();
+	}
+	
+	public boolean isAdvertisingApplications(){
+		return mShouldAdvertiseApplications;
+	}
+	
 	public boolean isAdvertisingEnabled() {
 		return mAdvertisingEnabled;
 	}
@@ -138,8 +156,8 @@ public class SPFAdvertisingManager {
 	public List<String> getFieldIdentifiers() {
 		return new ArrayList<String>(mIdentifiers);
 	}
-	
-	public SPFPersona getPersonaToAdvertise(){
+
+	public SPFPersona getPersonaToAdvertise() {
 		return mPersonaToAdv;
 	}
 
@@ -150,16 +168,25 @@ public class SPFAdvertisingManager {
 		if (!mIdentifiers.contains(ProfileField.IDENTIFIER.getIdentifier())) {
 			mIdentifiers.add(ProfileField.IDENTIFIER.getIdentifier());
 		}
-		
+
 		SPFPersona persona = mPersonaToAdv;
 		ProfileFieldContainer pfc = ps.getProfileFieldBulk(mIdentifiers.toArray(new String[0]), persona);
 		for (String k : mIdentifiers) {
 			String value = pfc.getFieldValue(k);
 			if (value != null) {
-				profile.put(k, value);
+				profile.putField(k, value);
 			} // TODO support collection
 		}
 
+		if(mShouldAdvertiseApplications){
+			List<AppAuth> apps = SPF.get().getSecurityMonitor().getAvailableApplications();
+			for(AppAuth app : apps){
+				if(app.getPersona().equals(mPersonaToAdv)){
+					profile.putApplication(app.getAppIdentifier());
+				}
+			}
+		}
+		
 		return profile;
 	}
 
@@ -170,9 +197,9 @@ public class SPFAdvertisingManager {
 	private void refreshProfileFieldsPreferences() {
 		getSharedPreferences().edit().putString(PREF_ADVERTISED_FIELD_NAME, TextUtils.join(SEPARATOR, mIdentifiers)).apply();
 	}
-	
-	private void refreshPersonaPreferences(){
-		getSharedPreferences().edit().putString(PREF_PERSONA_TO_ADV, mPersonaToAdv.getIdentifier());
+
+	private void refreshPersonaPreferences() {
+		getSharedPreferences().edit().putString(PREF_PERSONA_TO_ADV, mPersonaToAdv.getIdentifier()).apply();
 	}
 
 	private void setAdvertisingEnabled(boolean active) {

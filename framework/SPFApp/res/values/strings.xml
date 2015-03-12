@@ -83,6 +83,9 @@
     <!-- Advertising -->
     <string name="advertising_list_switch_label">Advertise my profile</string>
     <string name="advertising_list_title">Fields to advertise</string>
+    <string name="advertising_settings">Settings</string>
+    <string name="advertising_advertise_applications">Advertise installed applications</string>
+    <string name="advertising_persona">Persona to advertise:</string>
 
     <!-- Notifications -->
     <string name="notifications_emptyview">No notifications available</string>

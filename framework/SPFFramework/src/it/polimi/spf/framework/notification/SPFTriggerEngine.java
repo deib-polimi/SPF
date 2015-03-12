@@ -80,6 +80,12 @@ import android.util.LongSparseArray;
 			}
 		}
 
+		for (String app : query.getApps()) {
+			if (!profile.getApplications().contains(app)) {
+				return false;
+			}
+		}
+		
 		return true;
 	}
 

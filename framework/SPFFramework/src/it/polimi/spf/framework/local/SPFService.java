@@ -25,6 +25,7 @@ import it.polimi.spf.shared.SPFInfo;
 
 import android.app.Notification;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -38,7 +39,50 @@ public class SPFService extends Service {
 	// should be reflected in SPFInfo.
 
 	private static final String TAG = "SPFService";
+	private static final int NOTIFICATION_ID = 0xab01d;
 	private static boolean mIsStartedForeground = false;
+	private static String ACTION_START_FOREGROUND = "it.polimi.spf.framework.SPFService.START_FOREGROUND";
+	private static String ACTION_STOP_FOREGROUND = "it.polimi.spf.framework.SPFService.STOP_FOREGROUND";
+
+	/**
+	 * Sends an intent to SPFService, using the {@link Context} provided, that
+	 * makes it start in foreground.
+	 * 
+	 * @param c - the Context used to send the intent;
+	 * 
+	 * @see Service#startForeground(int, Notification)
+	 */
+	public static void startForeground(Context c) {
+		Intent i = new Intent(c, SPFService.class);
+		i.setAction(ACTION_START_FOREGROUND);
+		c.startService(i);
+	}
+
+	/**
+	 * Sends an intent to SPFService, using the {@link Context} provided, that
+	 * makes it stop foreground.
+	 * 
+	 * @param c - the Context used to send the intent;
+	 * 
+	 * @see Service#stopForeground(boolean)
+	 */
+	public static void stopForeground(Context c) {
+		Intent i = new Intent(c, SPFService.class);
+		i.setAction(ACTION_STOP_FOREGROUND);
+		c.startService(i);
+		c.stopService(i);
+	}
+
+	/**
+	 * Check whether the service is started or not. Note that this method return
+	 * false if the service is bounded.
+	 * 
+	 * @return true if the service is started, otherwise false
+	 */
+	public static boolean isStarted() {
+		return mIsStartedForeground;
+	}
+
 	private IBinder mServerBinder;
 	private IBinder mProfileBinder;
 	private IBinder mLocalServiceBinder;
@@ -98,13 +142,28 @@ public class SPFService extends Service {
 		return null;
 	}
 
-	//Triggered by the front end to keep spf service active in foreground
+	// Triggered by the front end to keep spf service active in foreground
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		if (!SPF.get().isConnected()) {
-			SPF.get().connect();
+		if(intent == null){
+			return START_STICKY;
 		}
-		startInForeground();
+		
+		String action = intent.getAction();
+
+		if (ACTION_START_FOREGROUND.equals(action)) {
+			if (!SPF.get().isConnected()) {
+				SPF.get().connect();
+			}
+
+			startInForeground();
+			Log.d(TAG, "Started in foreground");
+		} else if (ACTION_STOP_FOREGROUND.equals(action)) {
+			stopForeground(true);
+			mIsStartedForeground = false;
+			Log.d(TAG, "Foreground stopped");
+		}
+
 		return START_STICKY;
 	}
 
@@ -113,10 +172,10 @@ public class SPFService extends Service {
 		if (n == null) {
 			n = mDefaultNotification;
 		}
-		startForeground(001, n);
-		mIsStartedForeground=true;
+		startForeground(NOTIFICATION_ID, n);
+		mIsStartedForeground = true;
 	}
-	
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -124,26 +183,14 @@ public class SPFService extends Service {
 		// Default notification is empty, so Android will use its own default
 		// notification for this app.
 		mDefaultNotification = new Notification.Builder(this).build();
-		Log.d(TAG, "onCreate");
+		Log.d(TAG, "Service created");
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		mIsStartedForeground = false;
-		Log.d(TAG, "onDestroy");
+		Log.d(TAG, "Service destroyed");
 		SPF.get().onServerDestroy();
 		SPF.get().disconnect();
 	}
-	
-	/**
-	 * Check whether the service is started or not.
-	 * Note that this method return false if the service is bounded.
-	 * 
-	 * @return true if the service is started, otherwise false
-	 */
-	public static boolean isStarted(){
-		return mIsStartedForeground;
-	}
-
 }

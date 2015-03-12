@@ -28,7 +28,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,12 +115,10 @@ public class NavigationFragment extends Fragment {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				Context context = getActivity();
-				Intent i = new Intent(context, SPFService.class);
 				if (isChecked) {
-					context.startService(i);
+					SPFService.startForeground(getActivity());
 				} else {
-					context.stopService(i);
+					SPFService.stopForeground(getActivity());
 				}
 			}
 		});

@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.IInterface;
+import android.util.Log;
 
 /**
  * Base class for SPF components. A component is wrappers for an AIDL interface
@@ -93,9 +94,8 @@ public abstract class Component<C extends Component<C, I>, I extends IInterface>
 	 *            the type of the AIDL interface that is wrapped by the
 	 *            component
 	 */
-	protected static <C extends Component<C, I>, I extends IInterface> void load(
-			final Context context, final Descriptor<C, I> descriptor, final ConnectionCallback<C> callback) {
-		
+	protected static <C extends Component<C, I>, I extends IInterface> void load(final Context context, final Descriptor<C, I> descriptor, final ConnectionCallback<C> callback) {
+
 		Utils.notNull(context, "context must not be null");
 		Utils.notNull(descriptor, "context must not be null");
 
@@ -128,9 +128,8 @@ public abstract class Component<C extends Component<C, I>, I extends IInterface>
 	 * @param callback
 	 *            - the callback to notify of the service availability
 	 */
-	private static <C extends Component<C, I>, I extends IInterface> void bindToService(
-		final Context context, final Descriptor<C, I> descriptor, final ConnectionCallback<C> callback) {
-		
+	private static <C extends Component<C, I>, I extends IInterface> void bindToService(final Context context, final Descriptor<C, I> descriptor, final ConnectionCallback<C> callback) {
+
 		Intent intent = new Intent();
 		intent.setComponent(SPFInfo.getSPFServiceComponentName());
 		intent.setAction(descriptor.getActionName());
@@ -173,7 +172,11 @@ public abstract class Component<C extends Component<C, I>, I extends IInterface>
 	 * @see Context#unbindService(ServiceConnection)
 	 */
 	public void disconnect() {
-		mContext.unbindService(mConnection);
+		try {
+			mContext.unbindService(mConnection);
+		} catch (Exception e) {
+			Log.w(getClass().getSimpleName(), "Exception unbinding from service: ", e);
+		}
 	}
 
 	/**

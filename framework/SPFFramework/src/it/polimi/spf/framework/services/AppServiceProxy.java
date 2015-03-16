@@ -88,6 +88,10 @@ import android.util.Log;
 		}
 	}
 
+	String getComponentName(){
+		return mComponentName;
+	}
+	
 	private ClientExecutionService getAppService() {
 		synchronized (this) {
 			while (mAppService == null) {

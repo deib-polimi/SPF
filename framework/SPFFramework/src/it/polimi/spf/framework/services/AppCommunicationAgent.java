@@ -31,6 +31,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 
 /**
@@ -54,9 +57,34 @@ import android.util.Log;
 /* package */class AppCommunicationAgent {
 
 	private static final String TAG = "AppCommunicationAgent";
+	private static final int HOUSEKEEPER_CLEAN = 0;
+	
+	// Delay after which a proxy is removed from the pool
+	private static final int HOUSEKEEPER_DELAY = 15 * 1000;
+
 	private Map<String, AppServiceProxy> mProxies;
 	private Context mContext;
 	private boolean mShutdown;
+	private Handler mHousekeeper;
+	private final Handler.Callback mHousekeeperCallback = new Handler.Callback() {
+
+		@Override
+		public boolean handleMessage(Message msg) {
+			switch (msg.what) {
+			case HOUSEKEEPER_CLEAN:
+				synchronized (this) {
+					AppServiceProxy proxy = (AppServiceProxy) msg.obj;
+					mContext.unbindService(proxy);
+					mProxies.remove(proxy.getComponentName());
+					Log.d(TAG, "Housekeeper removed the proxy to " + proxy.getComponentName());
+				}
+				return true;
+
+			default:
+				return false;
+			}
+		}
+	};
 
 	/**
 	 * Creates a new {@link AppCommunicationAgent} that will use the given
@@ -68,6 +96,11 @@ import android.util.Log;
 	public AppCommunicationAgent(Context context) {
 		mContext = context;
 		mProxies = new HashMap<String, AppServiceProxy>();
+
+		// Dispatch Housekeeper messages on the main thread because threads from
+		// the MW thread pool may get terminated once the execution request has
+		// been completed
+		mHousekeeper = new Handler(Looper.getMainLooper(), mHousekeeperCallback);
 	}
 
 	/**
@@ -87,14 +120,20 @@ import android.util.Log;
 				throw new IllegalStateException("Communication agent is shutdown");
 			}
 
+			long start = System.nanoTime();
+
 			if (mProxies.containsKey(componentName)) {
 				AppServiceProxy proxy = mProxies.get(componentName);
-				Log.d(TAG, "Proxy for " + componentName + " found in cache");
+				unscheduleHousekeeper(proxy);
+				
 				if (proxy.isConnected()) {
-					Log.d(TAG, "Proxy is alive");
+					long st = (System.nanoTime() - start) / 1000;
+					Log.d(TAG, "HIT for " + componentName + " in " + st + "us");
+					
+					scheduleHousekeeper(proxy);
 					return proxy;
 				} else {
-					Log.d(TAG, "Proxy is dead: remove it");
+					Log.d(TAG, "Removed dead proxy (" + componentName + ")");
 					mProxies.remove(proxy);
 					// Go on with the creation of new proxy
 				}
@@ -111,10 +150,22 @@ import android.util.Log;
 				return null;
 			}
 
+			long st = (System.nanoTime() - start) / 1000;
+			Log.d(TAG, "MISS for " + componentName + " in " + st + "us");
+			
+			scheduleHousekeeper(proxy);
 			return proxy;
 		}
 	}
 
+	private void scheduleHousekeeper(AppServiceProxy proxy){
+		mHousekeeper.sendMessageDelayed(mHousekeeper.obtainMessage(HOUSEKEEPER_CLEAN, proxy), HOUSEKEEPER_DELAY);
+	}
+	
+	private void unscheduleHousekeeper(AppServiceProxy proxy){
+		mHousekeeper.removeMessages(HOUSEKEEPER_CLEAN, proxy);
+	}
+	
 	/**
 	 * Unbinds all proxies available in caches and prevents the creation of new
 	 * ones.
@@ -128,6 +179,7 @@ import android.util.Log;
 			for (AppServiceProxy p : mProxies.values()) {
 				if (p.isConnected()) {
 					mContext.unbindService(p);
+					mProxies.remove(p);
 				}
 			}
 

@@ -1,0 +1,34 @@
+<resources>
+
+    <string name="app_name">Coupon Provider</string>
+	<string name="activity_coupon_creation_title">Create coupon</string>
+	<string name="activity_coupon_detail_title">Coupon detail</string>
+	
+    <string name="action_coupon_add">Add coupon</string>
+    <string name="action_coupon_save">Save coupon</string>
+    <string name="action_coupon_delete">Delete coupon</string>
+    <string name="action_category_save">Save categories</string>
+    
+    <string name="coupon_list_empty">No coupons available</string>
+    <string name="coupon_photo">Coupon photo</string>
+    <string name="coupon_category">Category</string>
+    <string name="coupon_text">Text</string>
+    <string name="coupon_title">Title</string>
+    
+    <string name="error_coupon_photo_empty">You must choose a photo</string>
+    <string name="error_coupon_title_empty">Title cannot be empty</string>
+    <string name="error_coupon_text_empty">Text cannot be empty</string>
+    <string name="error_coupon_category_empty">You must choose a category</string>
+    <string name="error_notification_service_unavailable">Error: SPF notification not available</string>
+    <string name="error_trigger_invalid">Error: Trigger invalid</string>    
+    <string name="error_trigger_not_saved">Error: Trigger not saved</string>
+    <string name="error_trigger_not_deleted">Error: Trigger not deleted</string>
+    <string name="error_welcome_message_missing_detail">Please insert both title and message.</string>
+    
+    <string name="coupon_deletion_confirm_title">Delete coupon</string>
+    <string name="coupon_deletion_confirm_message">Do you want to delete this coupon?</string>
+    <string name="welcome_message_title">Title</string>
+    <string name="welcome_message_text">Text</string>
+    <string name="welcome_message_activate">Activate welcome message</string>
+    
+</resources>

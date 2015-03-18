@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp" >
+
+        <ImageView
+            android:id="@+id/coupon_photo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:background="#ffffffff"
+            android:contentDescription="@string/coupon_photo" />
+
+        <LinearLayout
+            style="@style/detail_container"
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/detail_title"
+                android:labelFor="@+id/coupon_title"
+                android:text="@string/coupon_title" />
+
+            <View style="@style/detail_separator" />
+
+            <EditText
+                android:id="@id/coupon_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/detail_container"
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/detail_title"
+                android:labelFor="@+id/coupon_text"
+                android:text="@string/coupon_text" />
+
+            <View style="@style/detail_separator" />
+
+            <EditText
+                android:id="@id/coupon_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/detail_container"
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/detail_title"
+                android:labelFor="@+id/coupon_category"
+                android:text="@string/coupon_category" />
+
+            <View style="@style/detail_separator" />
+
+            <Spinner
+                android:id="@id/coupon_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

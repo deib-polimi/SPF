@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="coupon_entry_photo_size">75dp</dimen>
+	<dimen name="coupon_entry_spacing">10dp</dimen>    
+</resources>
